@@ -1,0 +1,47 @@
+<meta charset="utf8" />
+<html>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js'></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"/></script>
+    <script>
+        window.initSqlJs = initSqlJs;
+        function query(ev) {
+            $('#status').text("Executing query (UI may freeze)...");
+            const queryString = document.getElementById('queryString').value;
+            let columns, values;
+            try {
+                ({columns, values} = window.db.exec(queryString)[0]);
+            } catch (e) {
+                $('#status').text(`Error: ${e.message}`);
+                return;
+            }
+            $('#results').DataTable({
+                data: values,
+                columns: columns.map(x => ({title: x})),
+                paging: false,
+                destroy: true,
+            });
+            $('#status').text("Ready...");
+        }
+    </script>
+    <script type="module">
+    const config = {
+      locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/${filename}`,
+    }
+    const response = await fetch('test.db');
+    const data = new Uint8Array(await response.arrayBuffer());
+    const SQL = await initSqlJs(config);
+    const db = new SQL.Database(data);
+    window.db = db;
+    $('#status').text("Ready...");
+    </script>
+    <script>
+    </script>
+    <body>
+        <div id="status">Loading...</div>
+        <textarea id="queryString" rows="4" cols="50">SELECT * FROM t ORDER BY a DESC LIMIT 2</textarea>
+        <input onclick="query()" id="queryButton" type="button" value=Query>
+        <table id="results"></table>
+    </body>
+</html>
