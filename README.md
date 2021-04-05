@@ -6,4 +6,4 @@ the DB to the client, and runs SQL.js. Inspired by
 [sql.js](https://sql.js.org/#/), and [sqlite-worker](https://github.com/WebReflection/sqlite-worker),
 ["SQLITE WITH WEBWORKERS"](https://observablehq.com/@a10k/sqlite-sql-js-with-webworkers).
 
-# [Demo](datadivan.html)
+# [Demo](https://philz.github.io/datadivan/datadivan.html)
