@@ -28,15 +28,18 @@
         }
     </script>
     <script type="module">
-    const config = {
-      locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/${filename}`,
+    async function m() {
+        const config = {
+          locateFile: (filename) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/${filename}`,
+        };
+        const response = await fetch('test.db');
+        const data = new Uint8Array(await response.arrayBuffer());
+        const SQL = await initSqlJs(config);
+        const db = new SQL.Database(data);
+        window.db = db;
+        $('#status').text("Ready...");
     }
-    const response = await fetch('test.db');
-    const data = new Uint8Array(await response.arrayBuffer());
-    const SQL = await initSqlJs(config);
-    const db = new SQL.Database(data);
-    window.db = db;
-    $('#status').text("Ready...");
+    m();
     </script>
     <script>
     </script>
